@@ -13,16 +13,16 @@ Comments for files must start at the beginning of the file, at first line and yo
 Variables must start with a dot and finish with a colon.
 
 ```
-_;; variable description_
-*.*variable_name*:*
+;; variable description
+.variable_name:
 ```
 
 #### Constants
 Constants are defined with *EQU*
 
 ```
-_;; constant description_
-ConstantName *EQU* value
+;; constant description
+ConstantName EQU value
 ```
 
 #### Functions and macros
@@ -34,28 +34,28 @@ You can use *:* instead of *-* following inputs, outputs and modified registers.
 Functions must start with a colon, and macros must be followed by *macro*
 
 ```
-_;; description_
-_;; another line for description_
-_;; in_
-_;; A - datum #1_
-_;; BC - datum #2_
-_;; out_
-_;; DE - result #1_
-_;; HL - result #2_
-_;; mod - A BC IX_
+;; description
+;; another line for description
+;; in
+;; A - datum #1
+;; BC - datum #2
+;; out
+;; DE - result #1
+;; HL - result #2
+;; mod - A BC IX
 my_function:
 ```
 
 ```
-_;; description_
-_;; another line for description_
-_;; in_
-_;; argument1 - datum #1_
-_;; argument2 - datum #2_
-_;; out_
-_;; DE - result #1_
-_;; HL - result #2_
-_;; mod - A BC IX_
+;; description
+;; another line for description
+;; in
+;; argument1 - datum #1
+;; argument2 - datum #2
+;; out
+;; DE - result #1
+;; HL - result #2
+;; mod - A BC IX
 macro MyMacro argument1, argument2
 ```
 
