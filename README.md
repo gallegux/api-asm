@@ -7,19 +7,20 @@ All comments start with **;;** and all of them must be joined, even with the cod
 ## Comments format
 
 #### Files
-_;; Comments for files must start at the beginning of the file, at first line._
-_;; you can have several lines_
+Comments for files must start at the beginning of the file, at first line and you you can have several lines
 
 #### Variables
 Variables must start with a dot and finish with a colon.
 
 _;; Description of variable_
+
 *.*variable_name*:*
 
 #### Constants
 Constants are defined with *EQU*
 
 _;; description of constant_
+
 ConstantName *EQU* value
 
 #### Functions and macros
@@ -31,25 +32,28 @@ You can use *:* instead of *-* following inputs, outputs and modified registers.
 Functions must start with a colon, and macros must be followed by *macro*
 
 _;; description_
+
 _;; another line for description_
+
 _;; in_
-_;; A - datum #1
-_;; BC - datum #2
+
+_;; A - datum #1_
+_;; BC - datum #2_
 _;; out_
 _;; DE - result #1_
 _;; HL - result #2_
-_;; mod - A BC IX
+_;; mod - A BC IX_
 my_function:
 
 _;; description_
 _;; another line for description_
 _;; in_
-_;; argument1 - datum #1
-_;; argument2 - datum #2
+_;; argument1 - datum #1_
+_;; argument2 - datum #2_
 _;; out_
 _;; DE - result #1_
 _;; HL - result #2_
-_;; mod - A BC IX
+_;; mod - A BC IX_
 macro MyMacro argument1, argument2
 
 If the inputs and outputs are registers they will be as uppercase in the result API.
