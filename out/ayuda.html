@@ -1,0 +1,723 @@
+<html>
+
+<head>
+<title>ASM API</title>
+<link rel='stylesheet' type='text/css' href='estilos.css'>
+</head>
+
+<body>
+
+<h1>
+<center>ASM API</center>
+</h1>
+
+<div id="NAV">
+<ul>
+<li><a href='#fichero1'>cls_animacion.asm</a></li>
+<li><a href='#fichero2'>cls_celdas_afectadas.asm</a></li>
+<li><a href='#fichero3'>ctes_juego.asm</a></li>
+<li><a href='#fichero4'>ctes_motor.asm</a></li>
+<li><a href='#fichero5'>juego.asm</a></li>
+<li><a href='#fichero6'>lib_render_tiles.asm</a></li>
+<li><a href='#fichero7'>lib_sprites_motor.asm</a></li>
+<li><a href='#fichero8'>main.asm</a></li>
+<li><a href='#fichero9'>man_interrupciones.asm</a></li>
+<li><a href='#fichero10'>man_jugador.asm</a></li>
+<li><a href='#fichero11'>man_mapa.asm</a></li>
+<li><a href='#fichero12'>man_pantalla.asm</a></li>
+<li><a href='#fichero13'>man_tiles.asm</a></li>
+<li><a href='#fichero14'>mapa.asm</a></li>
+<li><a href='#fichero15'>sprites.asm</a></li>
+<li><a href='#fichero16'>structs.asm</a></li>
+<li><a href='#fichero17'>sys_doble_buffer.asm</a></li>
+<li><a href='#fichero18'>sys_render.asm</a></li>
+<li><a href='#fichero19'>sys_render_marcador.asm</a></li>
+<li><a href='#fichero20'>sys_render_pantalla.asm</a></li>
+<li><a href='#fichero21'>sys_render_personaje.asm</a></li>
+<li><a href='#fichero22'>sys_render_tile.asm</a></li>
+<li><a href='#fichero23'>libs\arrays.asm</a></li>
+<li><a href='#fichero24'>libs\caracteres.asm</a></li>
+<li><a href='#fichero25'>libs\cls_coordenada.asm</a></li>
+<li><a href='#fichero26'>libs\cls_reloj.asm</a></li>
+<li><a href='#fichero27'>libs\colores.asm</a></li>
+<li><a href='#fichero28'>libs\coordenadas - copia.asm</a></li>
+<li><a href='#fichero29'>libs\ctes_mem_video.asm</a></li>
+<li><a href='#fichero30'>libs\macros.asm</a></li>
+<li><a href='#fichero31'>libs\macros_comparaciones.asm</a></li>
+<li><a href='#fichero32'>libs\macros_crtc.asm</a></li>
+<li><a href='#fichero33'>libs\macros_ld.asm</a></li>
+<li><a href='#fichero34'>libs\macros_struts.asm</a></li>
+<li><a href='#fichero35'>libs\matematicas.asm</a></li>
+<li><a href='#fichero36'>libs\miniload.asm</a></li>
+<li><a href='#fichero37'>libs\render_caracteres.asm</a></li>
+<li><a href='#fichero38'>libs\teclado.asm</a></li>
+<li><a href='#fichero39'>libs\video.asm</a></li>
+</ul>
+</div>
+
+<div id="CONT">
+<div id='fichero1'><div class='fich'>cls_animacion.asm</div>
+<div class='descFich'>Control de las animaciones</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>animacion_actualizar</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>ix</span> &nbsp; <span class='value'> coordenadas personaje</span></div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> animacion personaje</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>new_ANIMACION</div>
+<div class='eleFich'>CrearAnimacionPersonaje &nbsp; <span class='valCte'>_animacion, _incrementos, _pasos</span></div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>AnimarJugador</div>
+<div class='descEleFich'>Anima el personaje del jugador</div>
+</div>
+<div id='fichero2'><div class='fich'>cls_celdas_afectadas.asm</div>
+<div class='descFich'>Celdas afectadas por el movimiento de personajes</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>FILA_DETRAS &nbsp; = <span class='valCte'>0</span></div>
+<div class='eleFich'>MISMA_FILA &nbsp; = <span class='valCte'>1</span></div>
+<div class='eleFich'>FILA_DELANTE &nbsp; = <span class='valCte'>2</span></div>
+<div class='eleFich'>_FILA_SUPERIOR &nbsp; = <span class='valCte'>0</span></div>
+<div class='eleFich'>_FILA_MEDIO &nbsp; = <span class='valCte'>TAM_CELDA_AFECTADA*2</span></div>
+<div class='eleFich'>_FILA_INERIOR &nbsp; = <span class='valCte'>TAM_CELDA_AFECTADA*4</span></div>
+<div class='eleFich'>_rca_hackcode2 &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='eleFich'>_rca_hackcode3 &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>celdas_afectadas_fila_superior_{_nombre_personaje}</div><div class='eleFich'>celdas_afectadas_fila_medio_{_nombre_personaje}</div><div class='eleFich'>celdas_afectadas_fila_inferior_{_nombre_personaje}</div><div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>celdas_afectadas_reset</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> inicio de los arrays de celdas afectadas</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL</span></div>
+<div class='eleFich'>celdas_afectadas_set_movimiento_vertical</div><div class='descEleFich'>marca como afectadas las celdas (x,y) (x,y-1) (x,y+1)</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> fila,columna</span></div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> array de celdas afectadas</span></div><div class='eleFich'>celdas_afectadas_set_movimiento_horizontal</div><div class='descEleFich'>marca como afectadas las celdas (x,y) (x-1,y) (x-1,y-1) (x,y-1)</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> fila,columna</span></div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> array de celdas afectadas</span></div><div class='eleFich'>celdas_afectadas_set_fila</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> fila,columna</span></div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> lista de celdas</span></div><div class='eleFich'>celda_afectada_set</div><div class='descEleFich'>Establece una celda como afectada</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> fila,columna</span></div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> registro celda afectada</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>celdas_afectadas_render</div><div class='descEleFich'>pinta las celdas afectadas segun la fila a la que correspondan</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>iy</span> &nbsp; <span class='value'> array de celdas_afectadas</span></div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> funcion render</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL IY</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>new_CeldaAfectada</div>
+<div class='descEleFich'>celdas que hay que sobreescribir</div>
+<div class='eleFich'>new_CELDAS_AFECTADAS &nbsp; <span class='valCte'>_nombre_personaje</span></div>
+</div>
+<div id='fichero3'><div class='fich'>ctes_juego.asm</div>
+<div class='descFich'>CONSTANTES DEL JUEGO</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>SCREEN_WIDTH &nbsp; = <span class='valCte'>#48</span></div>
+<div class='descEleFich'>ancho de la pantalla en bytes</div>
+<div class='eleFich'>MAPA_ANCHO &nbsp; = <span class='valCte'>23</span></div>
+<div class='descEleFich'>ancho del mapa en tiles ; debe ser multiplo de PANTALLA_ANCHO-1,ej N*PANTALLA_ANCHO-1</div>
+<div class='eleFich'>MAPA_ALTO &nbsp; = <span class='valCte'>17</span></div>
+<div class='descEleFich'>alto del mapa en tiles ; debe ser multiplo de PANTALLA_ALTO-1,ej N*PANTALLA_ALTO-1</div>
+<div class='eleFich'>PANTALLA_ANCHO &nbsp; = <span class='valCte'>12</span></div>
+<div class='descEleFich'>ancho en tiles de la pantalla</div>
+<div class='eleFich'>PANTALLA_ALTO &nbsp; = <span class='valCte'>10</span></div>
+<div class='descEleFich'>alto en tiles de la pantalla</div>
+<div class='eleFich'>MAX_X_MAPA &nbsp; = <span class='valCte'>MAPA_ANCHO-PANTALLA_ANCHO</span></div>
+<div class='descEleFich'>valor maximo para la variable (mapa_x)</div>
+<div class='eleFich'>MAX_Y_MAPA &nbsp; = <span class='valCte'>MAPA_ALTO-PANTALLA_ALTO</span></div>
+<div class='descEleFich'>valor maximo para la variable (mapa_y)</div>
+<div class='eleFich'>ANCHO_TILE_PIXELS &nbsp; = <span class='valCte'>12</span></div>
+<div class='descEleFich'>ancho de los tiles en pixels ; anchura en pixel mode0 -> 24 pixels modo1</div>
+<div class='eleFich'>ANCHO_TILE_BYTES &nbsp; = <span class='valCte'>6</span></div>
+<div class='descEleFich'>ancho tile en bytes</div>
+<div class='eleFich'>ALTO_BASE_TILE_BYTES &nbsp; = <span class='valCte'>16 ; altura del sprite del tile con altura 0</span></div>
+<div class='descEleFich'>altura de los sprites para los tiles de altura 0 (suelo)</div>
+<div class='eleFich'>ANCHO_SPRITE_BYTES &nbsp; = <span class='valCte'>6</span></div>
+<div class='descEleFich'>ancho de los sprites en bytes<br>(tiles y sprites ocupan una celda)</div>
+<div class='eleFich'>INCR_FILA &nbsp; = <span class='valCte'>SCREEN_WIDTH+SCREEN_WIDTH</span></div>
+<div class='descEleFich'>incremento en memoria de video de una fila de tiles, cada fila ocupa 2 lineas de caracteres</div>
+<div class='eleFich'>INCR_COLUMNA &nbsp; = <span class='valCte'>ANCHO_TILE_BYTES</span></div>
+<div class='descEleFich'>incremento en memoria de video de una columna de tiles=anchura tile en bytes</div>
+<div class='eleFich'>PANT_INI &nbsp; = <span class='valCte'>SCREEN_WIDTH+SCREEN_WIDTH+SCREEN_WIDTH+SCREEN_WIDTH</span></div>
+<div class='descEleFich'>esquina superior izquierda, corresponde al offset en mem.video del tile 0,0</div>
+<div class='eleFich'>COORDENADA_Y_INICIO_PARA_PERSONAJE &nbsp; = <span class='valCte'>6*8</span></div>
+<div class='descEleFich'>coordenada y del personaje cuando esta en la fila 0 (la fila de arriba)</div>
+<div class='eleFich'>POSICION_RELOJ_1 &nbsp; = <span class='valCte'>#0020</span></div>
+<div class='descEleFich'>offset en mem.video del reloj</div>
+<div class='eleFich'>MOVER_ARRIBA &nbsp; = <span class='valCte'>#FE00</span></div>
+<div class='descEleFich'>incrementos de la animacion cuando se mueve hacia arriba, byteH=eje y ; byteL=eje x</div>
+<div class='eleFich'>MOVER_ABAJO &nbsp; = <span class='valCte'>#0200</span></div>
+<div class='descEleFich'>incrementos de la animacion cuando se mueve hacia abajo, byteH=eje y ; byteL=eje x</div>
+<div class='eleFich'>MOVER_IZQUIERDA &nbsp; = <span class='valCte'>#00FE</span></div>
+<div class='descEleFich'>incrementos de la animacion cuando se mueve hacia la izquierda, byteH=eje y ; byteL=eje x</div>
+<div class='eleFich'>MOVER_DERECHA &nbsp; = <span class='valCte'>#0002</span></div>
+<div class='descEleFich'>incrementos de la animacion cuando se mueve hacia la derecha, byteH=eje y ; byteL=eje x</div>
+<div class='eleFich'>PASOS_HORIZONTAL &nbsp; = <span class='valCte'>6</span></div>
+<div class='descEleFich'>numero de frames en los movimientos horizontales</div>
+<div class='eleFich'>PASOS_VERTICAL &nbsp; = <span class='valCte'>8</span></div>
+<div class='descEleFich'>numero de frames en los movimientos verticales</div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>array_posiciones_memoria_video</div><div class='descEleFich'>tantas filas y columnas como celdas se representan en pantalla, generado con la macro GenerarArrayPosicionesMemoria</div>
+<div class='eleFich'>paleta_juego</div><div class='descEleFich'>paleta del juego</div>
+<div class='eleFich'>set_teclas_qaop</div><div class='descEleFich'>combinacion teclas basada en QAOP</div>
+<div class='eleFich'>set_teclas_flecha</div><div class='descEleFich'>combinacion de teclas basada en las flechas</div>
+<div class='eleFich'>set_teclas_jovenzuelo</div><div class='descEleFich'>combinacion de teclas basada en WSAD</div>
+<div class='eleFich'>set_teclas_joystick</div><div class='descEleFich'>combinacino de teclas basada en joystick</div>
+<div class='eleFich'>set_teclas_complementarias_fila</div><div class='descEleFich'>combinacion de teclas para la seleccion rapida basada en los numeros de la fila de arriba del teclado</div>
+<div class='eleFich'>set_teclas_complementarias_teclado_numerico</div><div class='descEleFich'>combinacion de teclas para la seleccion rapida basada en los numeros de funcion</div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>GenerarPosicionesMemoriaFila &nbsp; <span class='valCte'>dm_fila</span></div>
+<div class='descEleFich'>genera los offsets de las celdas de una fila</div>
+<div class='eleFich'>GenerarArrayPosicionesMemoria</div>
+<div class='descEleFich'>genera los offsets de las celdas de la pantalla</div>
+</div>
+<div id='fichero4'><div class='fich'>ctes_motor.asm</div>
+<div class='descFich'>tipos de linea de los sprites</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>LINEA_SPRITE_SIN_DATOS &nbsp; = <span class='valCte'>0 ; la linea no tiene datos, luego saltar a la siguiente</span></div>
+<div class='eleFich'>LINEA_SPRITE_OPACA &nbsp; = <span class='valCte'>1 ; la linea tapa todo lo que haya debajo</span></div>
+<div class='eleFich'>LINEA_SPRITE_CON_TRANSPARENCIA &nbsp; = <span class='valCte'>2 ; la linea tiene pixels transparentes</span></div>
+</div>
+<div id='fichero5'><div class='fich'>juego.asm</div>
+<div class='descFich'>implementacion del juego</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>TAM_ARRAY_TECLAS &nbsp; = <span class='valCte'>NUM_TECLAS_ESCANEAR</span></div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>array_teclas_funciones</div><div class='descEleFich'>array de teclas usadas en el juego</div>
+<div class='eleFich'>mapa_x</div><div class='descEleFich'>coordenada x del mapa</div>
+<div class='eleFich'>mapa_y</div><div class='descEleFich'>coordenada y del mapa</div>
+<div class='eleFich'>jugador_celda</div><div class='descEleFich'>coordenadas del jugador en el escenario actual</div>
+<div class='eleFich'>jugador_celda_x</div><div class='eleFich'>jugador_celda_y</div><div class='eleFich'>objetos_mochila</div><div class='descEleFich'>codigos de los objetos en la mochila</div>
+<div class='eleFich'>reloj_partida</div><div class='descEleFich'>reloj de la partida</div>
+<div class='eleFich'>ptr_pantalla</div><div class='descEleFich'>puntero a la pantalla</div>
+<div class='eleFich'>coordenadas_jugador</div><div class='descEleFich'>coordenadas del sprite del jugador</div>
+<div class='eleFich'>animacion_jugador</div><div class='descEleFich'>animacion del jugador</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>		.{_id_tecla}</div><div class='eleFich'>set_game_screen</div><div class='eleFich'>reset_juego</div><div class='eleFich'>inicio_juego</div><div class='eleFich'>bucle_juego</div><div class='eleFich'>test_teclas_juego</div><div class='eleFich'>accion_arriba</div><div class='eleFich'>accion_abajo</div><div class='eleFich'>accion_derecha</div><div class='eleFich'>accion_izquierda</div><div class='eleFich'>is_celda_ocupable</div><div class='descEleFich'>mira si una celda se puede ocupar</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>bc</span> &nbsp; <span class='value'> fila,columna de la celda</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>Z</span> &nbsp; <span class='value'> si z=1 la celda no es ocupable, si z=0 si es ocupable</span></div><div class='eleFich'>render_jugador</div><div class='eleFich'>accion_fire1</div><div class='eleFich'>accion_fire2</div><div class='eleFich'>accion_mochila_1</div><div class='eleFich'>accion_mochila_2</div><div class='eleFich'>accion_mochila_3</div><div class='eleFich'>accion_mochila_4</div><div class='eleFich'>accion_mochila_5</div><div class='eleFich'>accion_mochila_6</div><div class='eleFich'>accion_mochila_7</div><div class='eleFich'>accion_mochila_8</div><div class='eleFich'>accion_mochila</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> numero pulsado</span></div><div class='eleFich'>subir_mapa</div><div class='eleFich'>bajar_mapa</div><div class='eleFich'>derecha_mapa</div><div class='eleFich'>izquierda_mapa</div><div class='eleFich'>pausa</div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>new_TECLA &nbsp; <span class='valCte'>_id_tecla, _mascara_tecla, _funcion</span></div>
+</div>
+<div id='fichero6'><div class='fich'>lib_render_tiles.asm</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>SALTO_TILES_ZZ &nbsp; = <span class='valCte'>#e000 + SCREEN_WIDTH</span></div>
+<div class='descEleFich'>salto entre bloques tras zigzag de lineas</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>render_sprite_6x8_opaco</div><div class='descEleFich'>codigo-gray & zigzag</div>
+<div class='eleFich'>render_sprite_6x8_con_transparencias</div><div class='eleFich'>render_sprite_6x8_mixto</div><div class='descEleFich'>el sprite mixto contiene un byte al inicio de cada fila<br>segun este byte la linea puede ser opaca o con transparencia<br>si es 0 es una fila opaca, si no es con transparencia</div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>CambiarLinea &nbsp; <span class='valCte'>sor, nbit</span></div>
+<div class='eleFich'>CambiarByte &nbsp; <span class='valCte'>iod</span></div>
+<div class='eleFich'>CopiarByteOp</div>
+<div class='descEleFich'>copiar byte opaco</div>
+<div class='eleFich'>CopiarLineaOp &nbsp; <span class='valCte'>iod</span></div>
+<div class='descEleFich'>copiar linea opaca</div>
+<div class='eleFich'>CambiarByteTr &nbsp; <span class='valCte'>iod</span></div>
+<div class='eleFich'>CopiarByteTr</div>
+<div class='eleFich'>CopiarLineaTr &nbsp; <span class='valCte'>iod</span></div>
+<div class='descEleFich'>copiar linea con transparencias</div>
+<div class='eleFich'>CopiarLineaMixta &nbsp; <span class='valCte'>iod</span></div>
+<div class='eleFich'>CopiarLineaMixta2 &nbsp; <span class='valCte'>iod</span></div>
+</div>
+<div id='fichero7'><div class='fich'>lib_sprites_motor.asm</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>LINEA_OPACA &nbsp; = <span class='valCte'>#10</span></div>
+<div class='eleFich'>LINEA_CON_TRANSPARENCIA &nbsp; = <span class='valCte'>#17</span></div>
+<div class='eleFich'>SALTAR_LINEA &nbsp; = <span class='valCte'>#51</span></div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>inc_linea_de</div><div class='eleFich'>sprite_linea_opaca</div><div class='eleFich'>sprite_pixel_con_transparencia</div><div class='eleFich'>sprite_linea_con_transparencia</div><div class='eleFich'>put_sprite_linea_mixta</div><div class='eleFich'>put_sprite_mixto</div><div class='eleFich'>put_sprite_opaco</div><div class='eleFich'>trans_byte</div><div class='eleFich'>put_sprite_con_mascara</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>iyl</span> &nbsp; <span class='value'> alto</span></div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> sprite</span></div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> dir mem video</span></div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>TransByte</div>
+</div>
+<div id='fichero8'><div class='fich'>main.asm</div>
+<div class='descFich'>mejor que sobren un par bytes en la longitud</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>POSICION_MEMORIA_PROGRAMA &nbsp; = <span class='valCte'>#300</span></div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>copia_pila</div><div class='eleFich'>inicio</div><div class='eleFich'>FIN</div></div>
+<div id='fichero9'><div class='fich'>man_interrupciones.asm</div>
+<div class='descFich'>null<br>https://www.youtube.com/watch?v=DWmSR1EPvt0&t=1590s<br>https://www.youtube.com/watch?v=Y70WWi3zbcE<br>https://www.youtube.com/watch?v=QqSLwMz6yG4<br>https://www.youtube.com/watch?v=avHJYjYCmXU&t=25s<br>https://www.youtube.com/watch?v=UMgja5zy92U<br>https://www.youtube.com/watch?v=Ka40LTI6NMM<br>https://www.youtube.com/watch?v=ZiXyjElFwzU</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>numero_interrupcion</div><div class='eleFich'>interrupcion_1</div><div class='eleFich'>interrupcion_2</div><div class='eleFich'>interrupcion_3</div><div class='eleFich'>interrupcion_4</div><div class='eleFich'>interrupcion_5</div><div class='eleFich'>interrupcion_6</div><div class='eleFich'>set_int_handler</div><div class='eleFich'>wait_interrupt</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> numero de interrupcion</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; ;; DEST: B</span></div>
+<div class='eleFich'>waitVSYNC</div><div class='eleFich'>wvs_wait</div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>SetFuncionInterrupcion &nbsp; <span class='valCte'>direccion</span></div>
+<div class='eleFich'>EntrarInterrupcion &nbsp; <span class='valCte'>_numero_interrupcion</span></div>
+<div class='eleFich'>SalirInterrupcion</div>
+<div class='eleFich'>WaitInt &nbsp; <span class='valCte'>n</span></div>
+</div>
+<div id='fichero10'><div class='fich'>man_jugador.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>init_jugador</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>BC</span> &nbsp; <span class='value'> fila,columna</span></div></div>
+<div id='fichero11'><div class='fich'>man_mapa.asm</div>
+<div class='descFich'>la celda viene determinada por (mapa_x),(mapa_y)</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>get_pantalla</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>(mapa_x)</span></div><div class='elelista'><span class='key'>(mapa_y)</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> direccion de la primera celda</span></div><div class='elelista'><span class='key'>(ptr_pantalla) [direccionamiento indirecto]</span></div></div>
+<div id='fichero12'><div class='fich'>man_pantalla.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>get_tile_en_pantalla</div><div class='descEleFich'>obtiene un tile de la pantalla</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>(ptr_pantalla)</span></div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> fila</span></div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> tipo de celda</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL DE</span></div>
+<div class='eleFich'>get_direccion_tile</div><div class='descEleFich'>obtiene la direccion de una celda o tile</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>D</span> &nbsp; <span class='value'> fila</span></div><div class='elelista'><span class='key'>E</span> &nbsp; <span class='value'> columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> direccion donde esta la direccion de pantalla</span></div><div class='eleFich'>get_mem_video_celda_jugador</div><div class='descEleFich'>obtiene la direccion de pantalla de la celda que ocupa el jugador</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> direccion de pantalla de la celda</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE</span></div>
+</div>
+<div id='fichero13'><div class='fich'>man_tiles.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>tiles</div><div class='eleFich'>get_tile</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> tipo</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> direcc.entidad</span></div><div class='elelista'><span class='key'>DEST</span> &nbsp; <span class='value'> BC</span></div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>CrearTile &nbsp; <span class='valCte'>_id, _ocupable, _altura, _sprite1, _sprite2, _sprite3, _sprite4, _sprite5</span></div>
+</div>
+<div id='fichero14'><div class='fich'>mapa.asm</div>
+<div class='descFich'>D hierba</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>mapa</div></div>
+<div id='fichero15'><div class='fich'>sprites.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>spr_arbol</div><div class='eleFich'>spr_arbol_1</div><div class='eleFich'>spr_arbol_2</div><div class='eleFich'>spr_arbol_3</div><div class='eleFich'>spr_suelo</div><div class='eleFich'>spr_hierba</div><div class='eleFich'>spr_personaje</div></div>
+<div id='fichero16'><div class='fich'>structs.asm</div>
+</div>
+<div id='fichero17'><div class='fich'>sys_doble_buffer.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>init_doblebuffer</div><div class='descEleFich'>establece el backbuffer a la pagina #80 y la pagina visible a #c0</div>
+<div class='eleFich'>get_video_page</div><div class='descEleFich'>devuelve la actual pagina visible</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> #80 o #c0</span></div><div class='eleFich'>cambiar_pagina_visible</div><div class='descEleFich'>cambiar la pagina que se visualiza en pantalla</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC E</span></div>
+<div class='eleFich'>limpiar_pagina</div><div class='descEleFich'>llena una pagina con el valor 0<br>hl - inicio de la pagina<br>bc - tamano de la pagina</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC DE HL</span></div>
+<div class='eleFich'>limpiar_paginas</div><div class='descEleFich'>limpia las dos paginas del buffer</div>
+<div class='eleFich'>copiar_pagina</div><div class='descEleFich'>copia una pagina</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> origen</span></div><div class='elelista'><span class='key'>destino</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC DE HL</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>ld_backbuffer_to &nbsp; <span class='valCte'>reg16</span></div>
+<div class='descEleFich'>carga el valor de backbuffer al registro indicado</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>add_backbuffer_to &nbsp; <span class='valCte'>reg8</span></div>
+<div class='descEleFich'>de &larr; de + (backbuffer)</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+</div>
+<div id='fichero18'><div class='fich'>sys_render.asm</div>
+</div>
+<div id='fichero19'><div class='fich'>sys_render_marcador.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>render_reloj_tiempo_juego</div><div class='eleFich'>render_reloj</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>BC</span> &nbsp; <span class='value'> reloj</span></div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> destino memoria video</span></div><div class='eleFich'>render_dos_puntos</div><div class='eleFich'>render_byte_de_numeros</div><div class='eleFich'>render_numero</div><div class='descEleFich'>IN A - numero</div>
+</div>
+<div id='fichero20'><div class='fich'>sys_render_pantalla.asm</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>_ULTIMA_FILA &nbsp; = <span class='valCte'>aux</span></div>
+<div class='eleFich'>_ancho_rectangulo &nbsp; = <span class='valCte'>3</span></div>
+<div class='eleFich'>;_ULTIMA_FILA &nbsp; = <span class='valCte'>aux</span></div>
+<div class='eleFich'>__pp_inicio1 &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='eleFich'>__pp_inicio2 &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='eleFich'>__pp_frames &nbsp; = <span class='valCte'>$-1</span></div>
+<div class='eleFich'>__pp_altura &nbsp; = <span class='valCte'>$-1</span></div>
+<div class='eleFich'>__pp_incremento_inicio_rectangulo &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='eleFich'>__cr_ancho &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='eleFich'>__cr_800_ancho &nbsp; = <span class='valCte'>$-2</span></div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>render_pantalla_backbuffer</div><div class='descEleFich'>pinta la pantalla completa en el backbuffer</div>
+<div class='eleFich'>render_fila_tiles</div><div class='eleFich'>presentar_pantalla_arriba_abajo</div><div class='eleFich'>presentar_pantalla_abajo_arriba</div><div class='eleFich'>presentar_pantalla_derecha_izquierda</div><div class='eleFich'>presentar_pantalla_izquierda_derecha</div><div class='eleFich'>presentar_pantalla</div><div class='eleFich'>cambiar_inicio_rectangulo</div><div class='eleFich'>copiar_rectangulo</div><div class='descEleFich'>copia un rectangulo de una pagina a otra, tanto HL como DE tienen que estar alineados en filas</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>(_cr_hackcode1)</span> &nbsp; <span class='value'> ancho rectangulo</span></div><div class='elelista'><span class='key'>(_cr_hackcode2)</span> &nbsp; <span class='value'> #800 - ancho rectangulo</span></div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> origen</span></div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> destino</span></div><div class='elelista'><span class='key'>iyl</span> &nbsp; <span class='value'> alto</span></div><div class='eleFich'>check_direccion</div><div class='descEleFich'>chequela si la direccion en hl se ha salido de la pagina</div>
+</div>
+<div id='fichero21'><div class='fich'>sys_render_personaje.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>put_sprite_personaje</div></div>
+<div id='fichero22'><div class='fich'>sys_render_tile.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>render_tile_parte_arriba</div><div class='descEleFich'>pinta las 3 partes (las que pueden tener transparencias) de arriba del tile</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> pos.memoria para el sprite 1</span></div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> pos.tile</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>render_tile_parte_abajo</div><div class='descEleFich'>pinta las 2 partes de abajo del tile (opacas)</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> pos.memoria para el sprite 1</span></div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> pos.tile</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>render_tile</div><div class='descEleFich'>dibuja un tile entero</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> pos.memoria para el sprite 1</span></div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> tile</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>render_celda_fila_abajo</div><div class='descEleFich'>pinta la parte con transparencias de la celda de abajo del personaje</div>
+</div>
+<div id='fichero23'><div class='fich'>libs\arrays.asm</div>
+<div class='descFich'>funciones para obtener elementos de arrays</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>get_array_item</div><div class='descEleFich'>obtiene un elemento de un array</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir.array</span></div><div class='elelista'><span class='key'>DE</span> &nbsp; <span class='value'> tam.elemento</span></div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> num.elemento</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir.elemento</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A HL</span></div>
+<div class='eleFich'>get_word_array</div><div class='descEleFich'>obtiene un word de un array de words<br><b>valido cuando A es menor que 128</b></div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir.array</span></div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> num.elemento</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> direccion</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL</span></div>
+<div class='eleFich'>get_word_array2</div><div class='descEleFich'>obtiene un word de un array de words<br>OPTIMIZAR PQ EL DOBLE DE BC SALE CON ADD HL,HL<br>HL - dir.array<br>BC - num.elemento</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> direccion</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL</span></div>
+<div class='eleFich'>get_word_matriz</div><div class='descEleFich'>obtiene un word de una matriz de words</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir.matriz</span></div><div class='elelista'><span class='key'>BC</span> &nbsp; <span class='value'> num. elementos por fila en bytes // o incremento por fila</span></div><div class='elelista'><span class='key'>D</span> &nbsp; <span class='value'> fila</span></div><div class='elelista'><span class='key'>E</span> &nbsp; <span class='value'> columna <b>(e<128)</b></span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> word</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC</span></div>
+<div class='eleFich'>get_byte_matriz</div><div class='descEleFich'>obtiene un byte de una matriz de bytes</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir. matriz</span></div><div class='elelista'><span class='key'>BC</span> &nbsp; <span class='value'> num. elementos for fila // incremento por filas</span></div><div class='elelista'><span class='key'>D</span> &nbsp; <span class='value'> fila</span></div><div class='elelista'><span class='key'>E</span> &nbsp; <span class='value'> columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> valor del byte</span></div><div class='eleFich'>get_array_bytes_item</div><div class='descEleFich'>valido cuando se trata de una lista de bytes<br>HL=dir.array<br>A=num.elemento<br>devuelve el valor N de un array de bytes</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> valor del byte</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; C</span></div>
+<div class='eleFich'>find_in_byte_list</div><div class='descEleFich'>busca un caracter en una lista</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> dir.lista</span></div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> caracter</span></div><div class='elelista'><span class='key'>D</span> &nbsp; <span class='value'> tam.lista</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>Z</span> &nbsp; <span class='value'> z=1 encontrado  z=0 no encontrado  </span></div><div class='elelista'><span class='key'>E</span> &nbsp; <span class='value'> posicion</span></div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> direccion</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A DE HL</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>GetArrayItem &nbsp; <span class='valCte'>dir_array, num_item, tam_item, reg_dst</span></div>
+<div class='descEleFich'>obtiene un elemento de un array</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='elelista'><span class='key'>tam_item</span> &nbsp; <span class='value'> tamanio del elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado (de o bc)</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='elelista'><span class='key'>tam_item</span> &nbsp; <span class='value'> tamanio del elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado (de o bc)</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A DE HL</span></div>
+<div class='eleFich'>GetWordShortArrayItem &nbsp; <span class='valCte'>dir_array, num_item, reg_dst</span></div>
+<div class='descEleFich'>obtiene un elemento de un array de words. llama a get_word_array.</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> num.elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado (bc o de)</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> num.elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado (bc o de)</span></div><div class='eleFich'>GetWordArrayItem &nbsp; <span class='valCte'>dir_array, num_item, reg_dst</span></div>
+<div class='descEleFich'>obtiene un elemento de un array de words</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL</span></div>
+<div class='eleFich'>GetWordShortMatrixItem &nbsp; <span class='valCte'>dir_array, fila, columna, ancho, reg_dst</span></div>
+<div class='descEleFich'>obtiene un word de una matriz de words</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>fila</span> &nbsp; <span class='value'> la fila</span></div><div class='elelista'><span class='key'>columna</span> &nbsp; <span class='value'> la columna</span></div><div class='elelista'><span class='key'>ancho</span> &nbsp; <span class='value'> numero de elementos por fila</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>fila</span> &nbsp; <span class='value'> la fila</span></div><div class='elelista'><span class='key'>columna</span> &nbsp; <span class='value'> la columna</span></div><div class='elelista'><span class='key'>ancho</span> &nbsp; <span class='value'> numero de elementos por fila</span></div><div class='elelista'><span class='key'>reg_dst</span> &nbsp; <span class='value'> registro donde dejar el resultado</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>GetByteMatrixItem &nbsp; <span class='valCte'>dir_array, fila, columna, ancho</span></div>
+<div class='descEleFich'>obtiene un byte de una matriz de bytes</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>fila</span></div><div class='elelista'><span class='key'>columna</span></div><div class='elelista'><span class='key'>ancho</span> &nbsp; <span class='value'> numero de elementos por fila</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>fila</span></div><div class='elelista'><span class='key'>columna</span></div><div class='elelista'><span class='key'>ancho</span> &nbsp; <span class='value'> numero de elementos por fila</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC DE HL</span></div>
+<div class='eleFich'>GetByteArrayItem &nbsp; <span class='valCte'>dir_array, num_item</span></div>
+<div class='descEleFich'>obtiene un byte de una matriz de bytes</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir_array</span> &nbsp; <span class='value'> direccion del array</span></div><div class='elelista'><span class='key'>num_item</span> &nbsp; <span class='value'> numero de elemento</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC HL</span></div>
+</div>
+<div id='fichero24'><div class='fich'>libs\caracteres.asm</div>
+<div class='descFich'>definicion de letras y numeros  con 2 bytes de ancho y 7 de alto</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>CARACTER_TAM &nbsp; = <span class='valCte'>14 ; 14 bytes cada caracter</span></div>
+<div class='descEleFich'>tamanio en bytes de cada caracter</div>
+<div class='eleFich'>ANCHO_CARACTER &nbsp; = <span class='valCte'>2</span></div>
+<div class='descEleFich'>ancho caracter en bytes</div>
+<div class='eleFich'>ALTO_CARACTER &nbsp; = <span class='valCte'>7</span></div>
+<div class='descEleFich'>alto caracter en bytes</div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>letras</div><div class='descEleFich'>array con la definicion de las letras<br>[ enie<br>\ coma<br>] punto<br>| dos puntos</div>
+<div class='eleFich'>numeros</div><div class='descEleFich'>array con la definicion de los numeros</div>
+</div>
+<div id='fichero25'><div class='fich'>libs\cls_coordenada.asm</div>
+<div class='descFich'>un byte para la X y otro para la Y</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>coordenada_modificar</div><div class='descEleFich'>modifica la coordenada</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>bc</span> &nbsp; <span class='value'> incr en y, incr en x</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>coordenada_calcular_desplazamiento</div><div class='descEleFich'>calcula el desplazamiento de la coordenada.<br>usa la el array <b>filas_memoria_video</b></div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> fila,columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> desplazamiento</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC HL</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>new_COORDENADA</div>
+<div class='descEleFich'>Crea objetos COORDENADA<br>Genera la <b>CTE COORDENADA_X</b><br>Genera la <b>CTE COORDENADA_Y</b></div>
+</div>
+<div id='fichero26'><div class='fich'>libs\cls_reloj.asm</div>
+<div class='descFich'>Atributos: ticks, segundos totales, segundos, minutos, horas</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>NUM_TICKS_SEGUNDO &nbsp; = <span class='valCte'>50</span></div>
+<div class='descEleFich'>Numero de mini-incrementos por segundo</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>reloj_inc_tick</div><div class='descEleFich'>Incrementa los ticks del reloj.<br>Cuando llegan a NUM_TICKS_SEGUNDO se incrementan los segundos</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> variable reloj</span></div><div class='eleFich'>reloj_inc_segundo</div><div class='descEleFich'>Incrementa el reloj en un segundo</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> variable tiempo;</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='eleFich'>reloj_inc1_elemento_tiempo</div><div class='descEleFich'>Incrementa un byte en BCD</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> variable tiempo;</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>flag CARRY</span></div><div class='eleFich'>reloj_reset</div><div class='descEleFich'>Resetea el reloj</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> variable reloj</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A HL</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>new_RELOJ</div>
+<div class='descEleFich'>Crea un objeto RELOJ y las constantes para acceder con los registros ix iy<br>Struct: RELOJ<br>TICKS - mini-incrementos<br>SEGUNDOS_TOTALES<br>SEGUNDOS<br>MINUTOS<br>HORAS</div>
+</div>
+<div id='fichero27'><div class='fich'>libs\colores.asm</div>
+<div class='descFich'>Colores hardware</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>HW_BLACK &nbsp; = <span class='valCte'>#54</span></div>
+<div class='eleFich'>HW_BLUE &nbsp; = <span class='valCte'>#44</span></div>
+<div class='eleFich'>HW_BRIGHT_BLUE &nbsp; = <span class='valCte'>#55</span></div>
+<div class='eleFich'>HW_RED &nbsp; = <span class='valCte'>#5C</span></div>
+<div class='eleFich'>HW_MAGENTA &nbsp; = <span class='valCte'>#58</span></div>
+<div class='eleFich'>HW_MAUVE &nbsp; = <span class='valCte'>#5D</span></div>
+<div class='eleFich'>HW_BRIGHT_RED &nbsp; = <span class='valCte'>#4C</span></div>
+<div class='eleFich'>HW_PURPLE &nbsp; = <span class='valCte'>#45</span></div>
+<div class='eleFich'>HW_BRIGHT_MAGENTA &nbsp; = <span class='valCte'>#4D</span></div>
+<div class='eleFich'>HW_GREEN &nbsp; = <span class='valCte'>#56</span></div>
+<div class='eleFich'>HW_CYAN &nbsp; = <span class='valCte'>#46</span></div>
+<div class='eleFich'>HW_SKY_BLUE &nbsp; = <span class='valCte'>#57</span></div>
+<div class='eleFich'>HW_YELLOW &nbsp; = <span class='valCte'>#5E</span></div>
+<div class='eleFich'>HW_WHITE &nbsp; = <span class='valCte'>#40</span></div>
+<div class='eleFich'>HW_PASTEL_BLUE &nbsp; = <span class='valCte'>#5F</span></div>
+<div class='eleFich'>HW_ORANGE &nbsp; = <span class='valCte'>#4E</span></div>
+<div class='eleFich'>HW_PINK &nbsp; = <span class='valCte'>#47</span></div>
+<div class='eleFich'>HW_PASTEL_MAGENTA &nbsp; = <span class='valCte'>#4F</span></div>
+<div class='eleFich'>HW_BRIGHT_GREEN &nbsp; = <span class='valCte'>#52</span></div>
+<div class='eleFich'>HW_SEA_GREEN &nbsp; = <span class='valCte'>#42</span></div>
+<div class='eleFich'>HW_BRIGHT_CYAN &nbsp; = <span class='valCte'>#53</span></div>
+<div class='eleFich'>HW_LIME &nbsp; = <span class='valCte'>#5A</span></div>
+<div class='eleFich'>HW_PASTEL_GREEN &nbsp; = <span class='valCte'>#59</span></div>
+<div class='eleFich'>HW_PASTEL_CYAN &nbsp; = <span class='valCte'>#5B</span></div>
+<div class='eleFich'>HW_BRIGHT_YELLOW &nbsp; = <span class='valCte'>#4A</span></div>
+<div class='eleFich'>HW_PASTEL_YELLOW &nbsp; = <span class='valCte'>#43</span></div>
+<div class='eleFich'>HW_BRIGHT_WHITE &nbsp; = <span class='valCte'>#4B</span></div>
+</div>
+<div id='fichero28'><div class='fich'>libs\coordenadas - copia.asm</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>COORDENADA_X &nbsp; = <span class='valCte'>0</span></div>
+<div class='eleFich'>COORDENADA_Y &nbsp; = <span class='valCte'>1</span></div>
+<div class='eleFich'>COORDENADA_MV &nbsp; = <span class='valCte'>2</span></div>
+<div class='eleFich'>COORDENADA_MV_ANT &nbsp; = <span class='valCte'>4</span></div>
+<div class='eleFich'>COORDENADA_PTR_FILAS &nbsp; = <span class='valCte'>6</span></div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>	{nombre}_x</div><div class='eleFich'>	{nombre}_y</div><div class='eleFich'>	{nombre}_mv</div><div class='eleFich'>	{nombre}_mv_ant</div><div class='eleFich'>	{nombre}_ptr_filas_mv</div><div class='eleFich'>calcular_desplazamiento</div><div class='descEleFich'>calcula el desplazamiento de un punto, para ancho de pantalla=48 bytes</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>de</span> &nbsp; <span class='value'> fila,columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> desplazamiento</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='eleFich'>set_x_y</div><div class='descEleFich'>establece las coordenadas</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>ix</span> &nbsp; <span class='value'> obj.coordenadas</span></div><div class='elelista'><span class='key'>bc</span> &nbsp; <span class='value'> fila,columna</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>ix[COORDENADA_PTR_FILAS]</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='eleFich'>inc_x</div><div class='eleFich'>dec_x</div><div class='eleFich'>inc_y_2</div><div class='eleFich'>_inc_coordenada_x</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> dir objeto</span></div><div class='eleFich'>dec_coordenada_x</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> dir objeto</span></div><div class='eleFich'>inc_coordenada_y</div><div class='eleFich'>dec_coordenada_y</div><div class='eleFich'>rotar_mv</div><div class='eleFich'>set_x</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> puntero </span></div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> columna</span></div><div class='eleFich'>set_y</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> puntero </span></div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> fila</span></div><div class='eleFich'>mod_x_y</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> incremento en la jornada y</span></div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> incremento en la jornado x</span></div><div class='eleFich'>_set_x_y</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>IX</span> &nbsp; <span class='value'> puntero</span></div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> fila(y)</span></div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> columna(x)</span></div><div class='eleFich'>calcular_mv</div><div class='descEleFich'>calcula la posicion de memoria de video de unas coordenadas</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>ix</span> &nbsp; <span class='value'> objeto coordenadas</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>(hl)</span> &nbsp; <span class='value'> direccion de la direccion de memoria de video </span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>CrearCoordenada &nbsp; <span class='valCte'>nombre</span></div>
+</div>
+<div id='fichero29'><div class='fich'>libs\ctes_mem_video.asm</div>
+<div class='descFich'>costantes de la memoria de video</div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>filas_memoria_video</div><div class='descEleFich'>Offsets de memoria de video para el inicio de las filas</div>
+</div>
+<div id='fichero30'><div class='fich'>libs\macros.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>ptr_funcion</div><div class='eleFich'>cp2_de</div><div class='descEleFich'>X: A IY</div>
+<div class='eleFich'>sumar_bcd</div><div class='descEleFich'>(hl) = (hl) + de<br>C - numero de bytes de la variable<br>DE - numero a sumar<br>HL - direccion de la variable (el primer byte es el de menor peso)</div>
+<div class='eleFich'>random</div><div class='eleFich'>seed1</div><div class='eleFich'>seed2</div><div class='eleFich'>random_min_max</div><div class='descEleFich'>in B max<br>in C min<br>out A numero<br>dest A BC DE HL</div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>Inc_1_word &nbsp; <span class='valCte'>ADDRESS</span></div>
+<div class='descEleFich'>(ADDRESS) &larr; (ADDRESS) + 1</div>
+<div class='eleFich'>Inc_2_word &nbsp; <span class='valCte'>ADDRESS</span></div>
+<div class='descEleFich'>(ADDRESS) &larr; (ADDRESS) + 2</div>
+<div class='eleFich'>Inc_word &nbsp; <span class='valCte'>ADDRESS, VALOR</span></div>
+<div class='descEleFich'>(ADDRESS) &larr; (ADDRESS) + VALOR</div>
+<div class='eleFich'>Sumar_bytes_en_memoria &nbsp; <span class='valCte'>dir1, dir2</span></div>
+<div class='eleFich'>inc_byte &nbsp; <span class='valCte'>_direccion</span></div>
+<div class='eleFich'>dec_byte &nbsp; <span class='valCte'>_direccion</span></div>
+</div>
+<div id='fichero31'><div class='fich'>libs\macros_comparaciones.asm</div>
+<div class='descFich'>A<=x | CP x | Z=1 o C=1</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>iguales_w_indi_indi</div><div class='descEleFich'>Compara words apuntados por HL y DE</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>hl</span></div><div class='elelista'><span class='key'>de</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>flag Z</span> &nbsp; <span class='value'> 1 si son iguales, 0 si no</span></div><div class='eleFich'>is_valor_en_rango</div><div class='descEleFich'>Comprueba que un valor esta en un rango de valores</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> valor</span></div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> minimo</span></div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> maximo</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>flag Carry</span> &nbsp; <span class='value'> C=1 A esta en el rango, C=0 A no esta en el rango</span></div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>jr_si_A_menor &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>A<x cuando C=1 ; si c=0 -> no menor</div>
+<div class='eleFich'>jr_si_A_mayor &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a la dir_salto si A es mayor</div>
+<div class='eleFich'>jr_si_iguales &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a la dir_salto si A y el otro valor son iguales</div>
+<div class='eleFich'>jr_si_no_iguales &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a la dir_salto si A es distinto del otro valor</div>
+<div class='eleFich'>jr_si_A_mayor_o_igual &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a la dir_salto si A es mayor o igual que el otro valor</div>
+<div class='eleFich'>jr_si_A_menor_o_igual &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a dir_salto si A es menor o igual que el otro valor<br>A<=x cuando z=1 o c=1 ; si z=0 o c=0 -> a>x</div>
+<div class='eleFich'>jp_si_A_menor &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es menor que el otro valor<br>A<x cuando C=1 ; si c=0 -> no menor</div>
+<div class='eleFich'>jp_si_A_mayor &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es mayor que el otro valor</div>
+<div class='eleFich'>jp_si_iguales &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta a dir_salto si A y el otro valor son iguales</div>
+<div class='eleFich'>jp_si_no_iguales &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es distinto del otro valor</div>
+<div class='eleFich'>jp_si_A_mayor_o_igual &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es mayor o igual</div>
+<div class='eleFich'>jp_si_A_menor_o_igual &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es menor o igual<br>A<=x cuando z=1 o c=1 ; si z=0 o c=0 -> a>x</div>
+<div class='eleFich'>jp_si_signo_negativo &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es de signo negativo (primer bit=1)</div>
+<div class='eleFich'>jp_si_signo_positivo &nbsp; <span class='valCte'>dir_salto</span></div>
+<div class='descEleFich'>salta si A es de signo positivo (primer bit=0)</div>
+<div class='eleFich'>ret_si_iguales</div>
+<div class='descEleFich'>RET si tras la comparacion son iguales</div>
+<div class='eleFich'>ret_si_no_iguales</div>
+<div class='descEleFich'>RET si no son iguales</div>
+<div class='eleFich'>ret_si_signo_negativo</div>
+<div class='descEleFich'>RET si A es negativo (primer bit=1)</div>
+<div class='eleFich'>ret_si_signo_positivo</div>
+<div class='descEleFich'>RET si A es positivo (primer bit=0)</div>
+<div class='eleFich'>cp_indi &nbsp; <span class='valCte'>reg16</span></div>
+<div class='descEleFich'>Compara dos words, uno esta apuntado por el registro reg16 y el otro por HL</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro de 16 bits</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro de 16 bits</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+</div>
+<div id='fichero32'><div class='fich'>libs\macros_crtc.asm</div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>WriteCRTC &nbsp; <span class='valCte'>registro, valor</span></div>
+<div class='eleFich'>SetScreenWidth &nbsp; <span class='valCte'>ancho</span></div>
+<div class='eleFich'>SetScreenHeight &nbsp; <span class='valCte'>alto</span></div>
+<div class='eleFich'>SetScreenDimension &nbsp; <span class='valCte'>ancho, alto</span></div>
+<div class='eleFich'>SetScreenHorizontalPosition &nbsp; <span class='valCte'>despl</span></div>
+<div class='eleFich'>SetScreenVerticalPosition &nbsp; <span class='valCte'>despl</span></div>
+<div class='eleFich'>SetScreenPosition &nbsp; <span class='valCte'>desh, desv</span></div>
+</div>
+<div id='fichero33'><div class='fich'>libs\macros_ld.asm</div>
+<div class='descFich'>i -> registro ix o iy</div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>ldb_rr &nbsp; <span class='valCte'>dst, src</span></div>
+<div class='descEleFich'>dst &larr; src</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dst</span> &nbsp; <span class='value'> registro destino de 16 bits</span></div><div class='elelista'><span class='key'>src</span> &nbsp; <span class='value'> registro fuente de 16 bits</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dst</span> &nbsp; <span class='value'> registro destino de 16 bits</span></div><div class='elelista'><span class='key'>src</span> &nbsp; <span class='value'> registro fuente de 16 bits</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>ldb_mm &nbsp; <span class='valCte'>dst, src</span></div>
+<div class='descEleFich'>(dst) &larr; (src)</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dst</span> &nbsp; <span class='value'> registro de 16 bits que apunta a la direccion de memoria con el byte a leer</span></div><div class='elelista'><span class='key'>src</span> &nbsp; <span class='value'> registro de 16 bits que apunta a la direccion de memoria donde escribir el byte</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dst</span> &nbsp; <span class='value'> registro de 16 bits que apunta a la direccion de memoria con el byte a leer</span></div><div class='elelista'><span class='key'>src</span> &nbsp; <span class='value'> registro de 16 bits que apunta a la direccion de memoria donde escribir el byte</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>ldb_mr &nbsp; <span class='valCte'>dir, reg</span></div>
+<div class='descEleFich'>(dir) &larr; reg</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>dir</span> &nbsp; <span class='value'> direccion donde escribir el byte</span></div><div class='elelista'><span class='key'>reg</span> &nbsp; <span class='value'> registro de 8 bits con el byte</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>dir</span> &nbsp; <span class='value'> direccion donde escribir el byte</span></div><div class='elelista'><span class='key'>reg</span> &nbsp; <span class='value'> registro de 8 bits con el byte</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A (SI A!=REG)</span></div>
+<div class='eleFich'>ldb_rm &nbsp; <span class='valCte'>reg, dir</span></div>
+<div class='descEleFich'>reg &larr; (dir)</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>reg</span> &nbsp; <span class='value'> registro de 8 bits destino</span></div><div class='elelista'><span class='key'>dir</span> &nbsp; <span class='value'> direccion de memoria</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>reg</span> &nbsp; <span class='value'> registro de 8 bits destino</span></div><div class='elelista'><span class='key'>dir</span> &nbsp; <span class='value'> direccion de memoria</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A (SI A!=REG)</span></div>
+<div class='eleFich'>ldb_mv &nbsp; <span class='valCte'>_direccion, _valor</span></div>
+<div class='descEleFich'>(direccion) &larr; valor</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>direccion</span> &nbsp; <span class='value'> direccion de memoria destino</span></div><div class='elelista'><span class='key'>valor</span> &nbsp; <span class='value'> valor a escribir en la dir.mem.</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>direccion</span> &nbsp; <span class='value'> direccion de memoria destino</span></div><div class='elelista'><span class='key'>valor</span> &nbsp; <span class='value'> valor a escribir en la dir.mem.</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A</span></div>
+<div class='eleFich'>ldw_rr &nbsp; <span class='valCte'>dst, src</span></div>
+<div class='descEleFich'>dst &larr; src</div>
+<div class='eleFich'>ldw_rnn &nbsp; <span class='valCte'>REG16, BYTEH, BYTEL</span></div>
+<div class='descEleFich'>reg16 &larr; byteh*256 + bytel</div>
+<div class='eleFich'>ldw_ri &nbsp; <span class='valCte'>REG_DST, REG_PTR, DESP</span></div>
+<div class='descEleFich'>(reg16) &larr; (regptr+desp)</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>REG_DST</span> &nbsp; <span class='value'> REGISTRO DESTINO (bc, de, hl)</span></div><div class='elelista'><span class='key'>REG_PTR</span> &nbsp; <span class='value'> REGISTRO PUNTERO (ix, iy)</span></div><div class='elelista'><span class='key'>DESP</span> &nbsp; <span class='value'> desplazamiento</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>REG_DST</span> &nbsp; <span class='value'> REGISTRO DESTINO (bc, de, hl)</span></div><div class='elelista'><span class='key'>REG_PTR</span> &nbsp; <span class='value'> REGISTRO PUNTERO (ix, iy)</span></div><div class='elelista'><span class='key'>DESP</span> &nbsp; <span class='value'> desplazamiento</span></div><div class='eleFich'>ldw_ir &nbsp; <span class='valCte'>REG_PTR, DESP, REG_SRC</span></div>
+<div class='descEleFich'>(REG_DEST + DESP) &larr; REG</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>REG_DEST (ix, iy)</span></div><div class='elelista'><span class='key'>REG BC DE HL</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>REG_DEST (ix, iy)</span></div><div class='elelista'><span class='key'>REG BC DE HL</span></div><div class='eleFich'>ldw_indi &nbsp; <span class='valCte'>REG_DEST</span></div>
+<div class='descEleFich'>REG_DEST &larr; (HL) , HL++</div>
+<div class='eleFich'>ldw_indi_r &nbsp; <span class='valCte'>reg_src</span></div>
+<div class='descEleFich'>(hl) &larr; reg , HL++</div>
+<div class='eleFich'>inc_w_indi &nbsp; <span class='valCte'>reg16</span></div>
+<div class='descEleFich'>(hl) &larr; (hl)+1</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> direccionamiento</span></div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro a usar</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> direccionamiento</span></div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro a usar</span></div><div class='eleFich'>dec_w_indi &nbsp; <span class='valCte'>reg16</span></div>
+<div class='descEleFich'>(hl) &larr; (hl)-1</div>
+<div class='atVCFM'>Par&aacute;metros</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> direccionamiento</span></div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro a usar</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> direccionamiento</span></div><div class='elelista'><span class='key'>reg16</span> &nbsp; <span class='value'> registro a usar</span></div><div class='eleFich'>add_de_bc</div>
+<div class='descEleFich'>de &larr; de+bc</div>
+<div class='eleFich'>inc_m &nbsp; <span class='valCte'>direccion</span></div>
+<div class='descEleFich'>(hl) &larr; (hl)+1</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; HL</span></div>
+<div class='eleFich'>dec_m &nbsp; <span class='valCte'>direccion</span></div>
+<div class='descEleFich'>(hl) &larr; (hl)-1</div>
+<div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; HL</span></div>
+</div>
+<div id='fichero34'><div class='fich'>libs\macros_struts.asm</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>TAM_{nombre} &nbsp; = <span class='valCte'>_struct_contadorBytes</span></div>
+<div class='eleFich'>{nombre_struct}_{nombre_campo} &nbsp; = <span class='valCte'>_struct_contadorBytes</span></div>
+<div class='eleFich'>{nombre_struct}_{nombre_campo} &nbsp; = <span class='valCte'>_struct_contadorBytes</span></div>
+<div class='seccionFich'>MACROS</div>
+<div class='eleFich'>BeginStruct &nbsp; <span class='valCte'>nombre</span></div>
+<div class='eleFich'>EndStruct &nbsp; <span class='valCte'>nombre</span></div>
+<div class='eleFich'>FieldStruct &nbsp; <span class='valCte'>nombre_struct, nombre_campo, tam</span></div>
+<div class='eleFich'>DeclareFieldStruct &nbsp; <span class='valCte'>nombre_struct, nombre_campo, tam</span></div>
+</div>
+<div id='fichero35'><div class='fich'>libs\matematicas.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>multiplicar</div><div class='descEleFich'>HL = Num1 * Num2<br>implementado con sumas</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> Num1</span></div><div class='elelista'><span class='key'>BC</span> &nbsp; <span class='value'> Num2</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>hl</span> &nbsp; <span class='value'> resultado</span></div><div class='eleFich'>dividir</div><div class='eleFich'>d1_LOOP2</div><div class='eleFich'>d1_JUMP2</div><div class='eleFich'>d1_JUMP3</div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>add_to_DE &nbsp; <span class='valCte'>cte</span></div>
+<div class='descEleFich'>de &larr; de + cte</div>
+<div class='eleFich'>add_to_BC &nbsp; <span class='valCte'>cte</span></div>
+<div class='descEleFich'>de &larr; de + cte</div>
+</div>
+<div id='fichero36'><div class='fich'>libs\miniload.asm</div>
+<div class='descFich'>-------------------------------------------------------------------------------</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>;; Function r &nbsp; = <span class='valCte'>ires 7F (Gate Array port) at B'</span></div>
+<div class='eleFich'>and    b          ;; Remove upper bit doing and with 0x7F (unr &nbsp; = <span class='valCte'>ired bit)</span></div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>cpct_miniload_asm</div><div class='eleFich'>_ml_init</div><div class='eleFich'>_ml_tone</div><div class='eleFich'>_ml_wait</div><div class='eleFich'>_ml_sync</div><div class='eleFich'>_ml_full</div><div class='eleFich'>_ml_half</div><div class='eleFich'>_ml_secdelay</div><div class='eleFich'>_ml_edge</div><div class='eleFich'>_ml_next</div><div class='eleFich'>   inc   ix          ;; IN++ </div><div class='eleFich'>   dec   de          ;; DE-- </div><div class='eleFich'>_ml_byte</div><div class='eleFich'>_ml_bits</div><div class='eleFich'>_ml_exit</div></div>
+<div id='fichero37'><div class='fich'>libs\render_caracteres.asm</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>render_numero</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>a</span> &nbsp; <span class='value'> numero</span></div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> posicion</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE</span></div>
+<div class='eleFich'>render_h_bcd</div><div class='descEleFich'>dest A BC DE</div>
+<div class='eleFich'>render_l_bcd</div><div class='descEleFich'>render el numero BCD de la parte baja del byte</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> destino</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE</span></div>
+<div class='eleFich'>render_byte_bcd</div><div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> el byte</span></div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> destino</span></div><div class='eleFich'>render_puntos</div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL IY</span></div>
+<div class='eleFich'>render_vidas</div><div class='eleFich'>render_salas</div><div class='eleFich'>render_marcadores</div><div class='seccionFich'>MACROS</div>
+<div class='eleFich'>RenderBytePuntos &nbsp; <span class='valCte'>DIR_BYTE</span></div>
+<div class='eleFich'>PutMiniSprite_old &nbsp; <span class='valCte'>CX, CY, DIR_SPRITE, ANCHO, ALTO</span></div>
+<div class='eleFich'>PutMiniSprite &nbsp; <span class='valCte'>DIR_MEM, DIR_SPRITE</span></div>
+</div>
+<div id='fichero38'><div class='fich'>libs\teclado.asm</div>
+<div class='descFich'>mascara de tecla o mascara y fila en la que se encuentra</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>K_CursorUp &nbsp; = <span class='valCte'>#0100</span></div>
+<div class='eleFich'>K_CursorRight &nbsp; = <span class='valCte'>#0200</span></div>
+<div class='eleFich'>K_CursorDown &nbsp; = <span class='valCte'>#0400</span></div>
+<div class='eleFich'>K_F9 &nbsp; = <span class='valCte'>#0800</span></div>
+<div class='eleFich'>K_F6 &nbsp; = <span class='valCte'>#1000</span></div>
+<div class='eleFich'>K_F3 &nbsp; = <span class='valCte'>#2000</span></div>
+<div class='eleFich'>K_Enter &nbsp; = <span class='valCte'>#4000</span></div>
+<div class='eleFich'>K_Fdot &nbsp; = <span class='valCte'>#8000</span></div>
+<div class='eleFich'>K_CursorLeft &nbsp; = <span class='valCte'>#0101</span></div>
+<div class='eleFich'>K_Copy &nbsp; = <span class='valCte'>#0201</span></div>
+<div class='eleFich'>K_F7 &nbsp; = <span class='valCte'>#0401</span></div>
+<div class='eleFich'>K_F8 &nbsp; = <span class='valCte'>#0801</span></div>
+<div class='eleFich'>K_F5 &nbsp; = <span class='valCte'>#1001</span></div>
+<div class='eleFich'>K_F1 &nbsp; = <span class='valCte'>#2001</span></div>
+<div class='eleFich'>K_F2 &nbsp; = <span class='valCte'>#4001</span></div>
+<div class='eleFich'>K_F0 &nbsp; = <span class='valCte'>#8001</span></div>
+<div class='eleFich'>K_CLR &nbsp; = <span class='valCte'>#0102</span></div>
+<div class='eleFich'>K_CorcheteOpen &nbsp; = <span class='valCte'>#0202</span></div>
+<div class='eleFich'>K_Return &nbsp; = <span class='valCte'>#0402</span></div>
+<div class='eleFich'>K_CorcheteClose &nbsp; = <span class='valCte'>#0802</span></div>
+<div class='eleFich'>K_F4 &nbsp; = <span class='valCte'>#1002</span></div>
+<div class='eleFich'>K_Shift &nbsp; = <span class='valCte'>#2002</span></div>
+<div class='eleFich'>K_BackSlash &nbsp; = <span class='valCte'>#4002</span></div>
+<div class='eleFich'>K_Control &nbsp; = <span class='valCte'>#8002</span></div>
+<div class='eleFich'>K_Gorrillo &nbsp; = <span class='valCte'>#1003</span></div>
+<div class='eleFich'>K_Guion &nbsp; = <span class='valCte'>#2003</span></div>
+<div class='eleFich'>K_Arroba &nbsp; = <span class='valCte'>#4003</span></div>
+<div class='eleFich'>K_P &nbsp; = <span class='valCte'>#8003</span></div>
+<div class='eleFich'>K_PuntoComa &nbsp; = <span class='valCte'>#1003</span></div>
+<div class='eleFich'>K_DosPuntos &nbsp; = <span class='valCte'>#2003</span></div>
+<div class='eleFich'>K_Slash &nbsp; = <span class='valCte'>#4003</span></div>
+<div class='eleFich'>K_Punto &nbsp; = <span class='valCte'>#8003</span></div>
+<div class='eleFich'>K_0 &nbsp; = <span class='valCte'>#0104</span></div>
+<div class='eleFich'>K_9 &nbsp; = <span class='valCte'>#0204</span></div>
+<div class='eleFich'>K_O &nbsp; = <span class='valCte'>#0404</span></div>
+<div class='eleFich'>K_I &nbsp; = <span class='valCte'>#0804</span></div>
+<div class='eleFich'>K_L &nbsp; = <span class='valCte'>#1004</span></div>
+<div class='eleFich'>K_K &nbsp; = <span class='valCte'>#2004</span></div>
+<div class='eleFich'>K_M &nbsp; = <span class='valCte'>#4004</span></div>
+<div class='eleFich'>K_Coma &nbsp; = <span class='valCte'>#8004</span></div>
+<div class='eleFich'>K_8 &nbsp; = <span class='valCte'>#0105</span></div>
+<div class='eleFich'>K_7 &nbsp; = <span class='valCte'>#0205</span></div>
+<div class='eleFich'>K_U &nbsp; = <span class='valCte'>#0405</span></div>
+<div class='eleFich'>K_Y &nbsp; = <span class='valCte'>#0805</span></div>
+<div class='eleFich'>K_H &nbsp; = <span class='valCte'>#1005</span></div>
+<div class='eleFich'>K_J &nbsp; = <span class='valCte'>#2005</span></div>
+<div class='eleFich'>K_N &nbsp; = <span class='valCte'>#4005</span></div>
+<div class='eleFich'>K_Space &nbsp; = <span class='valCte'>#8005</span></div>
+<div class='eleFich'>K_6 &nbsp; = <span class='valCte'>#0106</span></div>
+<div class='eleFich'>K_5 &nbsp; = <span class='valCte'>#0206</span></div>
+<div class='eleFich'>K_R &nbsp; = <span class='valCte'>#0406</span></div>
+<div class='eleFich'>K_T &nbsp; = <span class='valCte'>#0806</span></div>
+<div class='eleFich'>K_G &nbsp; = <span class='valCte'>#1006</span></div>
+<div class='eleFich'>K_F &nbsp; = <span class='valCte'>#2006</span></div>
+<div class='eleFich'>K_B &nbsp; = <span class='valCte'>#4006</span></div>
+<div class='eleFich'>K_V &nbsp; = <span class='valCte'>#8006</span></div>
+<div class='eleFich'>K_4 &nbsp; = <span class='valCte'>#0107</span></div>
+<div class='eleFich'>K_3 &nbsp; = <span class='valCte'>#0207</span></div>
+<div class='eleFich'>K_E &nbsp; = <span class='valCte'>#0407</span></div>
+<div class='eleFich'>K_W &nbsp; = <span class='valCte'>#0807</span></div>
+<div class='eleFich'>K_S &nbsp; = <span class='valCte'>#1007</span></div>
+<div class='eleFich'>K_D &nbsp; = <span class='valCte'>#2007</span></div>
+<div class='eleFich'>K_C &nbsp; = <span class='valCte'>#4007</span></div>
+<div class='eleFich'>K_X &nbsp; = <span class='valCte'>#8007</span></div>
+<div class='eleFich'>K_1 &nbsp; = <span class='valCte'>#0108</span></div>
+<div class='eleFich'>K_2 &nbsp; = <span class='valCte'>#0208</span></div>
+<div class='eleFich'>K_Esc &nbsp; = <span class='valCte'>#0408</span></div>
+<div class='eleFich'>K_Q &nbsp; = <span class='valCte'>#0808</span></div>
+<div class='eleFich'>K_Tab &nbsp; = <span class='valCte'>#1008</span></div>
+<div class='eleFich'>K_A &nbsp; = <span class='valCte'>#2008</span></div>
+<div class='eleFich'>K_Mays &nbsp; = <span class='valCte'>#4008</span></div>
+<div class='eleFich'>K_Z &nbsp; = <span class='valCte'>#8008</span></div>
+<div class='eleFich'>K_Joy1Up &nbsp; = <span class='valCte'>#0109</span></div>
+<div class='eleFich'>K_Joy1Down &nbsp; = <span class='valCte'>#0209</span></div>
+<div class='eleFich'>K_Joy1Left &nbsp; = <span class='valCte'>#0409</span></div>
+<div class='eleFich'>K_Joy1Right &nbsp; = <span class='valCte'>#0809</span></div>
+<div class='eleFich'>K_Joy1Fire1 &nbsp; = <span class='valCte'>#1009</span></div>
+<div class='eleFich'>K_Joy1Fire2 &nbsp; = <span class='valCte'>#2009</span></div>
+<div class='eleFich'>K_Joy1Fire3 &nbsp; = <span class='valCte'>#4009</span></div>
+<div class='eleFich'>K_Del &nbsp; = <span class='valCte'>#8009</span></div>
+<div class='eleFich'>TAM_keyboard_buffer &nbsp; = <span class='valCte'>10</span></div>
+<div class='descEleFich'>tamanio del buffer</div>
+<div class='seccionFich'>VARIABLES</div>
+<div class='eleFich'>keyboard_buffer</div><div class='descEleFich'>buffer de teclado</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>scan_keyboard</div><div class='descEleFich'>Mira las teclas que estan pulsadas</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>keyboard_buffer</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC DE HL</span></div>
+<div class='eleFich'>	ld bc, #f782 ;; select ppi port direction</div><div class='eleFich'>_sk_loop</div><div class='eleFich'>is_key_pressed</div><div class='descEleFich'>Comprueba si la tecla esta pulsada</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>B</span> &nbsp; <span class='value'> mascara tecla</span></div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> fila</span></div><div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>Flag Z</span> &nbsp; <span class='value'> si z=0, la tecla se ha pulsado</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A E HL BC</span></div>
+<div class='eleFich'>is_any_key_pressed</div><div class='descEleFich'>Comprueba si alguna tecla se ha pulsado</div>
+<div class='atVCFM'>Salidas</div><div class='elelista'><span class='key'>Z</span> &nbsp; <span class='value'> Z=1 -> ninguna tecla pulsada ; Z=0 tecla pulsada</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; HL C A</span></div>
+</div>
+<div id='fichero39'><div class='fich'>libs\video.asm</div>
+<div class='descFich'>https://www.cpcwiki.eu/index.php/Gate_Array</div>
+<div class='seccionFich'>CONSTANTES</div>
+<div class='eleFich'>GA_port &nbsp; = <span class='valCte'>#7F00</span></div>
+<div class='descEleFich'>16-bit Port of the Gate Array (for the use with BC register)</div>
+<div class='eleFich'>GA_port_byte &nbsp; = <span class='valCte'>#7F</span></div>
+<div class='descEleFich'>8-bit Port of the Gate Array</div>
+<div class='eleFich'>PAL_PENR &nbsp; = <span class='valCte'>#00</span></div>
+<div class='descEleFich'>Command to select a PEN register in the PAL chip</div>
+<div class='eleFich'>PAL_INKR &nbsp; = <span class='valCte'>#40</span></div>
+<div class='descEleFich'>Command to set the INK of a previously selected PEN register in the PAL chip</div>
+<div class='eleFich'>PPI_PORT_B &nbsp; = <span class='valCte'>#F5</span></div>
+<div class='descEleFich'>Port B of the PPI, used to read Vsync/Jumpers/PrinterBusy/CasIn/Exp information</div>
+<div class='eleFich'>CRTC_SELECTREG &nbsp; = <span class='valCte'>#BC</span></div>
+<div class='descEleFich'>CRTC Port and command "Select Register"</div>
+<div class='eleFich'>CRTC_SETVAL &nbsp; = <span class='valCte'>#BD</span></div>
+<div class='descEleFich'>CRTC Port and command "Set Value"</div>
+<div class='seccionFich'>FUNCIONES</div>
+<div class='eleFich'>clear_screen</div><div class='descEleFich'>borrar pantalla en #c000<br><b>ojo:</b> que A es un valor, y un byte tiene dos valores, por lo que puede quedar 'rallado'</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> color hw</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC DE HL</span></div>
+<div class='eleFich'>set_video_mode</div><div class='descEleFich'>Establece el modo de video</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> modo</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; BC</span></div>
+<div class='eleFich'>	;; al modo pasado le sumamos</div><div class='eleFich'>set_ink</div><div class='descEleFich'>Funcion INK de basic</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>C</span> &nbsp; <span class='value'> num tinta</span></div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> color hw</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; B</span></div>
+<div class='eleFich'>set_palette</div><div class='descEleFich'>Establece la paleta de colores</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>HL</span> &nbsp; <span class='value'> array de 16 valores con los colores hardware</span></div><div class='atVCFM'>Registros modificados:<span class='listregs'> &nbsp; A BC HL</span></div>
+<div class='eleFich'>set_border_color</div><div class='descEleFich'>Establece el color del borde</div>
+<div class='atVCFM'>Entradas</div><div class='elelista'><span class='key'>A</span> &nbsp; <span class='value'> color hw</span></div></div>
+
+</div>
+
+</body>
+
+</html>
